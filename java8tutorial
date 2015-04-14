@@ -1,0 +1,11 @@
+functional programming in java 8
+
+Example:
+Function<Customer, Boolean> isValid = (x) -> x.isValidCustomer();
+
+checkOut(customerOrder, isValid);
+
+
+public void checkOut(CustomerOrder order, Function<Customer, Boolean> fn){
+  boolean result = (boolean) fn.apply(order.getCustomer());
+}
