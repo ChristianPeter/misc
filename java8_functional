@@ -1,0 +1,9 @@
+motivation
+method / function calls with parameters. previously only call-by-value or call-by-reference was possible
+
+but since java 8 you can give functional types as parameters as well.
+functions as first class citizens
+
+
+
+out?
