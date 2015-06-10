@@ -1,0 +1,102 @@
+In order to control an old stepper motor from an 1985 atari floppy drive from your arduino, you'll 
+also have to fetch an controller IC. 
+This is just a bunch of darlington transistors with additional diodes to protect the controlling circuits from inducted current by the stepper itself.
+
+
+the stepper motor is probably an epson:
+STEPPING MOTOR
+type SPM-3924
+SUWA SEIKOSHA CO. LTD.
+
+And has 5 wires since it's unipolar. So one wire is the common +5 VCC, the others control the four coils.
+
+red: 5V VCC
+orange: 1
+black: 2
+yellow: 3
+brown: 4
+
+To control the stepper I'll use the M54539P with 16 pins
+http://circuits.datasheetdir.com/218/M54539P-pinout.jpg
+
+
+2 to 7 input
+8 GND
+16 VCC -> red wire
+15 to 10 output
+15 orange
+14 black
+13 yellow
+12 brown
+
+
+VCC and GND are connected to the arduino GND and VIN and to the 9V external powersupply.
+the inputs are directly connected to the arduino
+
+
+
+
+
+code:
+
+int motorPins[] = {5,9,10,11};
+int currentStep = 0;
+int motorDelay = 5;
+int dir = 0;
+boolean isRunning = false;
+int count =0;
+
+void setup() {
+  for (int i = 0; i < 4; i++){
+    pinMode(motorPins[i], OUTPUT);
+  }
+  
+  pinMode(13, OUTPUT);
+  pinMode(2, INPUT);
+  pinMode(3, INPUT);
+}
+
+
+void step(){
+  digitalWrite(13, currentStep % 2 == 0? HIGH: LOW);
+  
+  if (dir == 0){
+    for (int i = 0; i < 4; i++){
+      digitalWrite(motorPins[i], i == currentStep ? HIGH:LOW);
+    }
+  }
+  else {
+    for (int i = 0; i < 4; i++){
+      digitalWrite(motorPins[3-i], i == currentStep ? HIGH:LOW);
+    }
+  }
+  delay(motorDelay);
+  currentStep ++;
+  if (currentStep > 3) currentStep = 0;
+}
+void loop() {
+  
+  int v1 = digitalRead(2);
+  int v2 = digitalRead(3);
+  int a0 = analogRead(0);
+  
+  motorDelay = map(a0, 0, 1023, 1, 100);  
+  
+  if (v1 == LOW){
+    isRunning = !isRunning;
+    delay(200);
+  }
+  
+  if (v2 == LOW){
+    dir = dir == 0? 1:0;
+    delay(200);
+  }
+  
+  if (isRunning){
+    step();
+  }  
+  
+}
+
+
+
