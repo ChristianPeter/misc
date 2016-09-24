@@ -1,0 +1,7 @@
+http://stackoverflow.com/questions/29532172/how-to-display-messages-in-thymeleaf-and-spring-boot
+
+https://spring.io/guides/gs/serving-web-content/
+
+http://blog.codeleak.pl/2016/03/quickstart-angular2-with-typescript-and.html
+
+http://blog.codeleak.pl/2014/04/how-to-spring-boot-and-thymeleaf-with-maven.html
